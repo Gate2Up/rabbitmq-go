@@ -62,7 +62,7 @@ func (a *amqpClient) AddPublisher(publisher *publisher.PublisherConfig) {
 	log.Println(fmt.Sprintf(`Exchange: %s created`, publisher.TopicName))
 }
 
-func (a *amqpClient) AddSubscriber(subscriber subscriber.SubscriberConfig) {
+func (a *amqpClient) AddSubscriber(subscriber *subscriber.SubscriberConfig) {
 	channel, err := a.Connection.Channel()
 	if err != nil {
 		log.Println(err.Error())

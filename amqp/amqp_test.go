@@ -46,15 +46,12 @@ func TestAddSubscriber(t *testing.T) {
 	dataDemo := []byte("Hello World")
 
 	forever := make(chan bool)
-	subscriberConfig := subscriber.SubscriberConfig{
-		TopicName: "TEST_TOPIC",
-		Schema:    nil,
-		Handler: func(data []byte) error {
-			assert.Equal(t, data, dataDemo)
-			forever <- true
-			return nil
-		},
-	}
+
+	subscriberConfig := subscriber.NewSubscriber("TEST_TOPIC", nil, func(data []byte) error {
+		assert.Equal(t, data, dataDemo)
+		forever <- true
+		return nil
+	})
 
 	conn, _ := amqp.NewClient(config)
 

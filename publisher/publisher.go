@@ -5,7 +5,9 @@ type PublisherConfig struct {
 	Schema    interface{}
 }
 
-func NewPublisher(topicName string, schema interface{}) *PublisherConfig {
+type schemaType interface{}
+
+func NewPublisher(topicName string, schema schemaType) *PublisherConfig {
 	publisherConfig := PublisherConfig{
 		TopicName: topicName,
 		Schema:    schema,
