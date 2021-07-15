@@ -56,8 +56,8 @@ RabbitMQ Library to using Event Driven Application based on Publish/Subscribe bu
   // create instance of the subscriber
   var Subscriber = subscriber.NewSubscriber("SUBSCRIBER_NAME", nil, handler)
 
-  // create instance of the subscriber
-  var Subscriber = subscriber.NewSubscriber("SUBSCRIBER_NAME", nil, handler)
+	// register subscriber to amqp
+	client.AddSubscriber(Subscriber)
 
   ```
 
