@@ -17,7 +17,7 @@ type Config struct {
 	Password    string
 }
 
-type amqpClient struct {
+type AmqpClient struct {
 	Connection  *amqp.Connection
 	ServiceName string
 }
@@ -27,7 +27,7 @@ func SetUri(config Config) string {
 }
 
 // Open Connection to AMQP Server
-func NewClient(config Config) (*amqpClient, error) {
+func NewClient(config Config) (*AmqpClient, error) {
 	uri := SetUri(config)
 	amqpConn, err := amqp.Dial(uri)
 
@@ -35,10 +35,10 @@ func NewClient(config Config) (*amqpClient, error) {
 		return nil, err
 	}
 
-	return &amqpClient{Connection: amqpConn, ServiceName: config.ServiceName}, nil
+	return &AmqpClient{Connection: amqpConn, ServiceName: config.ServiceName}, nil
 }
 
-func (a *amqpClient) AddPublisher(publisher *publisher.PublisherConfig) {
+func (a *AmqpClient) AddPublisher(publisher *publisher.PublisherConfig) {
 	channel, err := a.Connection.Channel()
 	if err != nil {
 		log.Println(err.Error())
@@ -62,7 +62,7 @@ func (a *amqpClient) AddPublisher(publisher *publisher.PublisherConfig) {
 	log.Println(fmt.Sprintf(`Exchange: %s created`, publisher.TopicName))
 }
 
-func (a *amqpClient) AddSubscriber(subscriber *subscriber.SubscriberConfig) {
+func (a *AmqpClient) AddSubscriber(subscriber *subscriber.SubscriberConfig) {
 	channel, err := a.Connection.Channel()
 	if err != nil {
 		log.Println(err.Error())
