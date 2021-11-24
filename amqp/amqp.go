@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Gate2Up/rabbitmq-go/publisher"
 	"github.com/Gate2Up/rabbitmq-go/subscriber"
 	"github.com/streadway/amqp"
 )
@@ -38,28 +37,12 @@ func NewClient(config Config) (*AmqpClient, error) {
 	return &AmqpClient{Connection: amqpConn, ServiceName: config.ServiceName}, nil
 }
 
-func (a *AmqpClient) AddPublisher(publisher *publisher.PublisherConfig) {
-	channel, err := a.Connection.Channel()
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
+type Publisher interface {
+	Build(client *AmqpClient)
+}
 
-	err = channel.ExchangeDeclare(
-		publisher.TopicName,
-		amqp.ExchangeTopic,
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
-
-	if err != nil {
-		log.Println(`Create exchange failed: `, err.Error())
-	}
-
-	log.Println(fmt.Sprintf(`Exchange: %s created`, publisher.TopicName))
+func (a *AmqpClient) AddPublisher(publisher Publisher) {
+	publisher.Build(a)
 }
 
 func (a *AmqpClient) AddSubscriber(subscriber *subscriber.SubscriberConfig) {

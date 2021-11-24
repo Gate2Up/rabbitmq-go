@@ -35,11 +35,15 @@ func TestNewClient(t *testing.T) {
 
 func TestAddPublisher(t *testing.T) {
 
-	publisherConfig := publisher.NewPublisher("TEST_TOPIC", nil)
+	publisher := publisher.NewPublisher("TEST_TOPIC", nil)
 	conn, _ := amqp.NewClient(config)
 
 	// if no error this case is passed - void
-	conn.AddPublisher(publisherConfig)
+	conn.AddPublisher(publisher)
+	status, err := publisher.Publish([]byte(`Hello World`))
+
+	assert.Equal(t, status, true)
+	assert.Equal(t, err, nil)
 }
 
 func TestAddSubscriber(t *testing.T) {
